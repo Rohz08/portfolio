@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rohith Dharshan H — Software Engineer</title>
-  <meta name="description" content="Software Engineer specialising in Backend Automation, AWS & Linux infrastructure for high-availability FinTech platforms." />
+  <title>Rohith Dharshan H — Automation &amp; Production Engineer</title>
+  <meta name="description" content="Automation &amp; Production Engineer specialising in Linux (RHEL), Bash automation and AWS for high-availability trading platforms." />
+  <meta name="theme-color" content="#0B0F19" />
+  <link rel="canonical" href="https://rohz08.github.io/portfolio/" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231E3A8A'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='800' text-anchor='middle' fill='%23fff'%3ERD%3C/text%3E%3C/svg%3E" />
+  <!-- Open Graph / LinkedIn / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Rohith Dharshan H — Automation &amp; Production Engineer" />
+  <meta property="og:description" content="Linux (RHEL), Bash automation and AWS for high-availability trading platforms." />
+  <meta property="og:url" content="https://rohz08.github.io/portfolio/" />
+  <meta property="og:image" content="https://rohz08.github.io/portfolio/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Rohith Dharshan H — Automation &amp; Production Engineer" />
+  <meta name="twitter:description" content="Linux (RHEL), Bash automation and AWS for high-availability trading platforms." />
+  <meta name="twitter:image" content="https://rohz08.github.io/portfolio/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -38,12 +53,24 @@
       --card:      #F8FAFF;
       --card-alt:  #EEF2FF;
       --border:    #CBD5E1;
+      --accent-lt: #2563EB;
       --accent-glow: rgba(59,130,246,0.1);
       --text:      #1E293B;
       --muted:     #64748B;
       --dim:       #94A3B8;
       --heading:   #0F172A;
     }
+    /* Light-theme contrast fixes for tags / badges */
+    [data-theme="light"] .skill-tag,
+    [data-theme="light"] .client-badge {
+      background: rgba(59,130,246,0.1);
+      border-color: rgba(59,130,246,0.3);
+      color: #1E3A8A;
+    }
+    [data-theme="light"] .skill-tag:hover { background: rgba(59,130,246,0.2); }
+    [data-theme="light"] .timeline-period,
+    [data-theme="light"] .edu-year,
+    [data-theme="light"] .project-env { color: #1D4ED8; }
 
     /* ─── RESET ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -126,6 +153,7 @@
       position: relative;
       transition: background var(--transition);
     }
+    .theme-toggle::before { content: ''; position: absolute; inset: -12px -6px; }
     .theme-toggle::after {
       content: '';
       position: absolute;
@@ -145,7 +173,7 @@
       cursor: pointer;
       background: none;
       border: none;
-      padding: 4px;
+      padding: 12px 8px;
     }
     .hamburger span {
       display: block;
@@ -342,12 +370,12 @@
       border: none;
     }
     .btn-primary {
-      background: var(--accent);
+      background: #2563EB;
       color: #fff;
       box-shadow: 0 0 0 0 rgba(59,130,246,0.4);
     }
     .btn-primary:hover {
-      background: var(--accent-lt);
+      background: #1D4ED8;
       color: #fff;
       transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba(59,130,246,0.35);
@@ -362,22 +390,6 @@
       color: var(--accent);
       transform: translateY(-2px);
     }
-    .hero-meta {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-top: 60px;
-      animation: fadeUp 0.7s 0.5s ease both;
-    }
-    .hero-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-    .hero-meta-item svg { color: var(--accent); flex-shrink: 0; }
     .scroll-hint {
       position: absolute;
       bottom: 36px; left: 50%;
@@ -516,6 +528,44 @@
       background: rgba(59,130,246,0.25);
       border-color: var(--accent);
     }
+
+    /* Human / soft skills */
+    .soft-head { margin-top: 88px; }
+    .soft-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+    .soft-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .soft-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(59,130,246,0.12);
+    }
+    .soft-icon {
+      width: 40px; height: 40px;
+      background: var(--accent-glow);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .soft-name {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 8px;
+    }
+    .soft-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
 
     /* ─── EXPERIENCE ─────────────────────────────────────────── */
     #experience { background: var(--surface); }
@@ -685,17 +735,6 @@
       padding: 3px 8px;
       border-radius: 6px;
     }
-    .project-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      margin-top: 4px;
-      transition: gap var(--transition);
-    }
-    .project-link:hover { gap: 10px; }
 
     /* ─── EDUCATION ──────────────────────────────────────────── */
     #education { background: var(--surface); }
@@ -776,6 +815,26 @@
       color: var(--muted);
     }
 
+    /* Languages */
+    .lang-block { margin-top: 56px; }
+    .lang-list { display: flex; flex-wrap: wrap; gap: 12px; }
+    .lang-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 18px;
+      font-size: 0.88rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .lang-chip span {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-left: 8px;
+    }
+
     /* ─── ACHIEVEMENTS ────────────────────────────────────────── */
     #achievements { background: var(--bg); }
     .achievement-card {
@@ -817,6 +876,18 @@
       color: var(--accent-lt);
       margin-bottom: 10px;
     }
+    .achievement-info .ach-role {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-lt);
+      background: var(--accent-glow);
+      border: 1px solid rgba(59,130,246,0.25);
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    [data-theme="light"] .achievement-info .ach-role { color: #1D4ED8; }
     .achievement-info p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
 
     /* ─── CONTACT ────────────────────────────────────────────── */
@@ -877,7 +948,7 @@
       text-align: center;
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      color: var(--dim);
+      color: var(--muted);
       z-index: 1;
       position: relative;
     }
@@ -905,6 +976,63 @@
     #btt.visible { opacity: 1; transform: none; }
     #btt:hover { background: var(--accent-lt); }
 
+    /* ─── CASE STUDIES / MISC ────────────────────────────────── */
+    .project-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--accent); transition: gap var(--transition);
+    }
+    .project-link:hover { gap: 10px; }
+    .case-head { margin-top: 88px; }
+    .case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; }
+    .case-card.wide { grid-column: 1 / -1; }
+    .case-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 32px;
+    }
+    .case-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .case-title { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500; color: var(--heading); }
+    .case-row { margin-bottom: 16px; }
+    .case-row:last-child { margin-bottom: 0; }
+    .case-label {
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+    }
+    .case-row p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+    .diagram { margin: 4px 0 24px; overflow-x: auto; }
+    .diagram svg { width: 100%; min-width: 560px; height: auto; display: block; }
+    .diagram text { font-family: var(--font-mono); font-size: 11px; fill: var(--text); }
+    .diagram .box { fill: var(--card-alt); stroke: var(--border); stroke-width: 1.2; }
+    .diagram .box-accent { fill: var(--accent-glow); stroke: var(--accent); stroke-width: 1.2; }
+    .diagram .arrow { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+    .diagram .arrowhead { fill: var(--accent); }
+    .soft-note { margin-top: 28px; font-size: 0.9rem; color: var(--muted); max-width: 640px; }
+    .cert-sub { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 32px 0 14px; }
+    .cert-item.small { padding: 12px 20px; }
+    .lang-line { margin-top: 40px; font-size: 0.88rem; color: var(--muted); }
+    .skip-link {
+      position: absolute; left: 16px; top: -60px; z-index: 2000;
+      background: var(--accent); color: #fff; padding: 10px 16px; border-radius: 8px; font-weight: 700;
+    }
+    .skip-link:focus { top: 12px; color: #fff; }
+    [data-theme="light"] .section-label,
+    [data-theme="light"] .nav-logo,
+    [data-theme="light"] .case-label,
+    [data-theme="light"] .project-link,
+    [data-theme="light"] .stat-number { color: #1D4ED8; }
+    @media (max-width: 480px) { .case-grid { grid-template-columns: 1fr; } .case-card { padding: 24px; } }
+
+    /* ─── ACCESSIBILITY ──────────────────────────────────────── */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent-lt);
+      outline-offset: 3px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+      .reveal, .reveal-left { opacity: 1; transform: none; }
+    }
+
     /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
@@ -913,9 +1041,9 @@
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .projects-grid { grid-template-columns: 1fr; }
       .section-pad { padding: 72px 0; }
+      .soft-head { margin-top: 64px; }
       .contact-card { padding: 40px 24px; }
       .achievement-card { flex-direction: column; }
-      .hero-meta { flex-direction: column; align-items: flex-start; gap: 10px; }
       .timeline::before { left: 0; }
       .timeline-item { padding-left: 28px; }
       .timeline-dot { left: -9px; }
@@ -923,15 +1051,17 @@
     @media (max-width: 480px) {
       .hero-name { font-size: 2.2rem; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ─── NAVBAR ─────────────────────────────────────────────── -->
 <nav id="navbar">
   <div class="nav-inner">
-    <div class="nav-logo">rohith<span>@devops</span>:~$</div>
+    <div class="nav-logo">rohith<span>@prod</span>:~$</div>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
@@ -942,7 +1072,7 @@
     </div>
     <div class="nav-right">
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -957,6 +1087,7 @@
   </div>
 </nav>
 
+<main id="main">
 <!-- ─── HERO ────────────────────────────────────────────────── -->
 <section id="hero">
   <div class="hero-grid-bg"></div>
@@ -968,41 +1099,31 @@
         Rohith<br><span class="accent-text">Dharshan H</span>
       </h1>
       <p class="hero-title">
-        Software Engineer
+        Automation &amp; Production Engineer
         <span class="pipe">|</span>
-        Backend & Automation
+        Linux (RHEL)
         <span class="pipe">|</span>
-        AWS &amp; Linux
+        AWS
       </p>
       <p class="hero-desc">
-        Building and deploying production-grade automation systems and operational tooling on Linux (RHEL) for high-availability FinTech infrastructure serving Zerodha, Dream11, and Groww.
+        I automate the checks that keep trading platforms up before market open. Bash, Linux and AWS tooling for high-availability FinTech infrastructure.
       </p>
       <div class="hero-actions">
         <a href="#projects" class="btn btn-primary">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           View Projects
         </a>
+        <a href="Rohith_Dharshan_Resume.pdf" download class="btn btn-outline">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Resume
+        </a>
         <a href="#contact" class="btn btn-outline">
           Get in Touch
         </a>
-        <a href="https://github.com/Rohz08" target="_blank" rel="noopener" class="btn btn-outline">
+        <a href="https://github.com/Rohz08" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
           GitHub
         </a>
-      </div>
-      <div class="hero-meta">
-        <div class="hero-meta-item">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Bengaluru, Karnataka
-        </div>
-        <div class="hero-meta-item">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
-          OmneNest Technologies
-        </div>
-        <div class="hero-meta-item">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          +91 99621 37171
-        </div>
       </div>
     </div>
   </div>
@@ -1021,9 +1142,9 @@
         <p class="section-label">// about me</p>
         <h2 class="section-title">Building systems<br>that don't break.</h2>
         <div class="about-text">
-          <p>Software Engineer with <strong>1+ year</strong> of professional experience building and deploying automation systems, backend scripts, and production-grade operational tooling on <strong>Linux (RHEL)</strong> environments.</p>
-          <p>I work on <strong>high-availability FinTech infrastructure</strong> serving Zerodha, Dream11, and Groww — where uptime is measured in seconds, and every script needs to be bulletproof.</p>
-          <p>A self-driven learner with certifications across Cloud, Networking, Cybersecurity, AI, and Satellite Systems — pursuing <strong>AWS Solutions Architect</strong> certification while expanding into Docker, Kubernetes, and CI/CD pipelines.</p>
+          <p>Software Engineer with <strong>2+ years</strong> of professional experience building and deploying automation systems, backend scripts, and production-grade operational tooling on <strong>Linux (RHEL)</strong> environments.</p>
+          <p>I work on <strong>high-availability FinTech infrastructure</strong> serving a leading Indian brokerage, a fantasy-sports platform, and an investing platform — where uptime is measured in seconds, and every script needs to be bulletproof.</p>
+          <p>A fast, self-driven learner who stays calm when things break, explains problems clearly, and has <strong>led a team</strong> to a national podium finish. Trained across Cloud, Networking, Cybersecurity, AI, and Satellite Systems, and focused on removing the manual steps that cause <strong>human-error incidents</strong>.</p>
         </div>
       </div>
       <div class="reveal">
@@ -1034,7 +1155,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number">3</div>
-            <div class="stat-label">Major FinTech Clients</div>
+            <div class="stat-label">FinTech Clients Supported</div>
           </div>
           <div class="stat-card">
             <div class="stat-number">4</div>
@@ -1042,7 +1163,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number">5+</div>
-            <div class="stat-label">Certifications Earned</div>
+            <div class="stat-label">Certifications &amp; Trainings</div>
           </div>
         </div>
       </div>
@@ -1062,12 +1183,12 @@
         <div class="skill-cat-icon">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
-        <div class="skill-cat-name">Programming & Scripting</div>
+        <div class="skill-cat-name">Programming &amp; Scripting</div>
         <div class="skill-tags">
           <span class="skill-tag">Bash (Advanced)</span>
           <span class="skill-tag">Shell Scripting</span>
           <span class="skill-tag">Python</span>
-          <span class="skill-tag">Functions & Arrays</span>
+          <span class="skill-tag">Functions &amp; Arrays</span>
           <span class="skill-tag">Error Handling</span>
           <span class="skill-tag">Strict Mode</span>
         </div>
@@ -1075,16 +1196,16 @@
 
       <div class="skill-category reveal">
         <div class="skill-cat-icon">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.94 11A8.994 8.994 0 1011 3.06V1h2v4h-4V1h2v2.06A8.994 8.994 0 1020.94 11zM12 21a7 7 0 110-14 7 7 0 010 14z"/></svg>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>
         </div>
-        <div class="skill-cat-name">Cloud & AWS</div>
+        <div class="skill-cat-name">Cloud &amp; AWS</div>
         <div class="skill-tags">
           <span class="skill-tag">AWS CLI</span>
           <span class="skill-tag">S3 Operations</span>
           <span class="skill-tag">Named Profiles</span>
           <span class="skill-tag">Recursive Listing</span>
           <span class="skill-tag">Production Archival</span>
-          <span class="skill-tag">AWS Certified</span>
+          <span class="skill-tag">AWS Cloud Foundations</span>
         </div>
       </div>
 
@@ -1106,7 +1227,7 @@
         <div class="skill-cat-icon">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <div class="skill-cat-name">Monitoring & Observability</div>
+        <div class="skill-cat-name">Monitoring &amp; Observability</div>
         <div class="skill-tags">
           <span class="skill-tag">Log Analysis</span>
           <span class="skill-tag">Feed Validation</span>
@@ -1126,25 +1247,63 @@
           <span class="skill-tag">DNS</span>
           <span class="skill-tag">Multicast Protocols</span>
           <span class="skill-tag">Adapter Config</span>
-          <span class="skill-tag">CCNA Certified</span>
+          <span class="skill-tag">CCNA Coursework (M1–3)</span>
         </div>
       </div>
 
       <div class="skill-category reveal">
         <div class="skill-cat-icon">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </div>
-        <div class="skill-cat-name">In Progress</div>
+        <div class="skill-cat-name">Incident &amp; Production Support</div>
         <div class="skill-tags">
-          <span class="skill-tag">Docker</span>
-          <span class="skill-tag">Kubernetes</span>
-          <span class="skill-tag">Terraform</span>
-          <span class="skill-tag">CI/CD Pipelines</span>
-          <span class="skill-tag">AWS Solutions Architect</span>
+          <span class="skill-tag">Live Incident Response</span>
+          <span class="skill-tag">Root Cause Analysis</span>
+          <span class="skill-tag">Client Escalations</span>
+          <span class="skill-tag">Ticketing (Salesforce)</span>
+          <span class="skill-tag">Prod / UAT / Backup / DR</span>
         </div>
       </div>
 
     </div>
+
+    <!-- Human skills -->
+    <div class="soft-head">
+      <p class="section-label reveal">// beyond the code</p>
+      <h2 class="section-title reveal">How I Work</h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="soft-grid">
+      <div class="soft-card reveal">
+        <div class="soft-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        </div>
+        <div class="soft-name">Automation Mindset</div>
+        <p class="soft-desc">If a task runs twice, I script it. 10+ production scripts now handle log archival, S3 backups and feed checks.</p>
+      </div>
+      <div class="soft-card reveal">
+        <div class="soft-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="soft-name">Calm Under Pressure</div>
+        <p class="soft-desc">Diagnosing feed and adapter failures in the pre-market window, where minutes matter.</p>
+      </div>
+      <div class="soft-card reveal">
+        <div class="soft-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div class="soft-name">Clear Communication</div>
+        <p class="soft-desc">Plain-language status updates during live incidents, and written RCA reports sent straight to clients.</p>
+      </div>
+      <div class="soft-card reveal">
+        <div class="soft-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="soft-name">Team Leadership</div>
+        <p class="soft-desc">Led a CanSat team as Team Lead to 3rd place at a pan-India competition.</p>
+      </div>
+    </div>
+    <p class="soft-note reveal">Off the clock: I'm good at just about any sport, and I try to be fair and kind to the people I work with.</p>
   </div>
 </section>
 
@@ -1158,22 +1317,25 @@
       <div class="timeline-item reveal">
         <div class="timeline-dot"></div>
         <div class="timeline-header">
-          <span class="timeline-role">Software Engineer — Automation & Production Support</span>
+          <span class="timeline-role">Software Engineer — Automation &amp; Production Engineering</span>
           <span class="timeline-period">Jan 2024 — Present</span>
         </div>
         <p class="timeline-company">OmneNest Technologies Pvt Ltd · Bengaluru, Karnataka</p>
         <div class="timeline-clients">
           <span class="client-badge">NEST Trading Platform</span>
-          <span class="client-badge">Zerodha</span>
-          <span class="client-badge">Dream11</span>
-          <span class="client-badge">Groww</span>
+          <span class="client-badge">Leading Indian brokerage</span>
+          <span class="client-badge">Fantasy-sports platform</span>
+          <span class="client-badge">Investing platform</span>
         </div>
         <div class="timeline-achievements">
-          <div class="achievement">Designed, developed, and deployed <strong>10+ production Bash automation scripts</strong> across UAT, Production, Backup, and Disaster Recovery environments — covering log archival, S3 backup pipelines, feed monitoring, and binary data extraction; directly improving operational reliability for 3 major FinTech clients.</div>
-          <div class="achievement">Engineered <strong>push_s3_bucket</strong>, a production S3 backup pipeline for Dream11 that dynamically discovers storage directories, compresses last-24h files, and uploads via named AWS CLI profiles — running live in Production and UAT with <strong>zero reported failures</strong>.</div>
-          <div class="achievement">Built <strong>feeds_check</strong>, a multi-exchange feed health monitoring tool with adapter auto-detection, multicast IP display, and version diagnostics — executed daily before market open across NSE, BSE, and MCX to ensure zero-downtime trading operations.</div>
+          <div class="achievement">Designed, developed, and deployed <strong>10+ production Bash automation scripts</strong> across UAT, Production, Backup, and Disaster Recovery environments — covering log archival, S3 backup pipelines, feed monitoring, and binary data extraction; directly improving operational reliability for three FinTech clients.</div>
+          <div class="achievement">Engineered <strong>push_s3_bucket</strong>, a production S3 backup pipeline for a fantasy-sports platform that dynamically discovers storage directories, compresses last-24h files, and uploads via named AWS CLI profiles — running live in Production and UAT, and removing the manual after-market-hours upload.</div>
+          <div class="achievement">Built <strong>feeds_check</strong>, a multi-exchange feed health monitoring tool with adapter auto-detection, multicast IP display, and version diagnostics — executed daily before market open across NSE, BSE, and MCX to catch feed and adapter issues before the market opens. It replaced manual checking, shows instantly whether exchange data is coming in, speeds up diagnosis, and saves roughly 20–35 minutes each morning.</div>
+          <div class="achievement">Managed the log lifecycle for <strong>6 script types</strong> with pattern-matched file detection, tgz compression, configurable retention policies, and tee-based dual logging with color-coded status indicators for rapid diagnostics.</div>
+          <div class="achievement">Prioritised removing error-prone manual steps from daily operations through automation, to prevent incidents caused by manual mistakes.</div>
+          <div class="achievement">Handled a <strong>primary server outage</strong> (firmware fault, per the infra team's RCA): escalated to my manager first, checked that other servers at the same location were unaffected, and brought the backup server live in about <strong>20 minutes</strong>, including a roughly 15-minute switchover and post-switch validation.</div>
           <div class="achievement">Provided live incident support on production trading infrastructure, diagnosed feed disruptions, adapter failures, and log errors under time-critical pre-market conditions, delivering clear <strong>Root Cause Analysis (RCA)</strong> reports directly to clients.</div>
-          <div class="achievement">Utilised <strong>Salesforce</strong> for end-to-end incident lifecycle management — tracking tickets, logging resolution steps, and maintaining communication records across routine and critical escalations.</div>
+          <div class="achievement">Kept clients informed with consistent status updates during live incidents and market-hours disruptions, tracking tickets in Salesforce, and collaborated with product stakeholders to prioritise and plan automation projects.</div>
         </div>
       </div>
     </div>
@@ -1193,7 +1355,7 @@
           <div class="project-icon">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
-          <span class="project-env">Dream11 PROD + UAT</span>
+          <span class="project-env">Fantasy-sports client · PROD + UAT</span>
         </div>
         <div class="project-name">push_s3_bucket</div>
         <p class="project-desc">Production S3 backup pipeline that dynamically discovers all storage directories, compresses files modified in the last 24 hours, and uploads to AWS S3 using named CLI profiles. Server-parameterized for multi-environment flexibility.</p>
@@ -1210,10 +1372,10 @@
           <div class="project-icon">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </div>
-          <span class="project-env">Zerodha PROD</span>
+          <span class="project-env">Brokerage client · PROD</span>
         </div>
         <div class="project-name">feeds_check</div>
-        <p class="project-desc">Multi-exchange feed monitor for NSE, BSE, MCX adapter feeds with ps-to-admin fallback detection. Displays version info, multicast IPs, and feed activity details. Segment-filterable — executed before every market open.</p>
+        <p class="project-desc">Multi-exchange feed monitor for NSE, BSE, MCX adapter feeds with ps-to-admin fallback detection. Displays version info, multicast IPs, and feed activity details. Segment-filterable. It replaces manual checking, shows instantly whether exchange data is flowing, and speeds up diagnosis; run before every market open.</p>
         <div class="project-tags">
           <span class="project-tag">Bash</span>
           <span class="project-tag">Multicast</span>
@@ -1227,10 +1389,10 @@
           <div class="project-icon">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
           </div>
-          <span class="project-env">Zerodha PROD</span>
+          <span class="project-env">Brokerage client · PROD</span>
         </div>
         <div class="project-name">spans_check</div>
-        <p class="project-desc">Span file validator across all nest_rs instances. Saturday-aware logic handles NSCCL/BSE (next Monday) vs MCX (yesterday) date expectations. Clearly flags missing or outdated segments per exchange, reducing manual validation time significantly.</p>
+        <p class="project-desc">Span file validator across all trading-engine instances. Saturday-aware logic handles NSCCL/BSE (next Monday) vs MCX (yesterday) date expectations. Clearly flags missing or outdated segments per exchange. Replaces a daily manual check across 20 servers and saves roughly 20–35 minutes before market open.</p>
         <div class="project-tags">
           <span class="project-tag">Bash</span>
           <span class="project-tag">NSCCL/BSE</span>
@@ -1244,10 +1406,10 @@
           <div class="project-icon">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
           </div>
-          <span class="project-env">Groww PROD / Backup / DR</span>
+          <span class="project-env">Investing-platform client · PROD / Backup / DR</span>
         </div>
         <div class="project-name">custom_archive_and_truncate_log</div>
-        <p class="project-desc">Log archival system for Groww's three environment tiers. Archives nexus LP/query and mrecon logs using truncate-in-place to preserve active file handles. Deployed across Production, Backup, and Disaster Recovery environments.</p>
+        <p class="project-desc">Log archival system for a client's three environment tiers. Archives application and reconciliation logs using truncate-in-place to preserve active file handles. Deployed across Production, Backup, and Disaster Recovery environments.</p>
         <div class="project-tags">
           <span class="project-tag">Bash</span>
           <span class="project-tag">Log Management</span>
@@ -1261,10 +1423,10 @@
           <div class="project-icon">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
           </div>
-          <span class="project-env">Zerodha Backup</span>
+          <span class="project-env">Brokerage client · Backup</span>
         </div>
         <div class="project-name">fetch_tom_data</div>
-        <p class="project-desc">Binary data extraction pipeline that extracts and converts TOM binary data via oselect → admin_to_mnm → mnm_delimited, exporting as CSV. Supports lookup by order number or user ID — used for trade investigation and compliance audit.</p>
+        <p class="project-desc">Binary data extraction pipeline that extracts binary order data and converts it with the platform's internal tools, exporting as CSV. Supports lookup by order number or user ID — used for trade investigation and compliance audit.</p>
         <div class="project-tags">
           <span class="project-tag">Bash</span>
           <span class="project-tag">Binary Parsing</span>
@@ -1273,34 +1435,77 @@
         </div>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-header">
-          <div class="project-icon">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-          </div>
-          <span class="project-env">GitHub</span>
+    </div>
+
+    <!-- Case studies -->
+    <div class="case-head">
+      <p class="section-label reveal">// case studies</p>
+      <h2 class="section-title reveal">How I Think</h2>
+      <div class="divider reveal"></div>
+    </div>
+    <div class="case-grid">
+
+      <article class="case-card wide reveal">
+        <div class="case-top">
+          <div class="case-title">push_s3_bucket</div>
+          <span class="project-env">Fantasy-sports client · PROD + UAT</span>
         </div>
-        <div class="project-name">rohith-devops-journey</div>
-        <p class="project-desc">Personal DevOps learning repository documenting hands-on practice with Docker, Kubernetes, Terraform, and CI/CD pipelines — tracking the journey from shell scripting to full-stack infrastructure automation.</p>
-        <div class="project-tags">
-          <span class="project-tag">DevOps</span>
-          <span class="project-tag">Docker</span>
-          <span class="project-tag">Kubernetes</span>
-          <span class="project-tag">Terraform</span>
+        <div class="diagram" role="img" aria-label="Flow: server, discover directories, filter files from last 24 hours, compress, upload with AWS CLI profile, S3 bucket">
+          <svg viewBox="0 0 760 70" xmlns="http://www.w3.org/2000/svg">
+            <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" class="arrowhead"/></marker></defs>
+            <rect class="box" x="2" y="12" width="104" height="46" rx="8"/><text x="54" y="32" text-anchor="middle">Server</text><text x="54" y="46" text-anchor="middle">PROD / UAT</text>
+            <rect class="box" x="140" y="12" width="104" height="46" rx="8"/><text x="192" y="32" text-anchor="middle">Discover</text><text x="192" y="46" text-anchor="middle">storage dirs</text>
+            <rect class="box" x="278" y="12" width="104" height="46" rx="8"/><text x="330" y="32" text-anchor="middle">Files from</text><text x="330" y="46" text-anchor="middle">last 24h</text>
+            <rect class="box" x="416" y="12" width="104" height="46" rx="8"/><text x="468" y="32" text-anchor="middle">Compress</text><text x="468" y="46" text-anchor="middle">.tgz</text>
+            <rect class="box" x="554" y="12" width="104" height="46" rx="8"/><text x="606" y="32" text-anchor="middle">AWS CLI</text><text x="606" y="46" text-anchor="middle">named profile</text>
+            <rect class="box-accent" x="690" y="12" width="68" height="46" rx="8"/><text x="724" y="39" text-anchor="middle">S3</text>
+            <path class="arrow" d="M106 35 H138" marker-end="url(#ah)"/><path class="arrow" d="M244 35 H276" marker-end="url(#ah)"/><path class="arrow" d="M382 35 H414" marker-end="url(#ah)"/><path class="arrow" d="M520 35 H552" marker-end="url(#ah)"/><path class="arrow" d="M658 35 H688" marker-end="url(#ah)"/>
+          </svg>
         </div>
-        <a href="https://github.com/Rohz08/rohith-devops-journey" target="_blank" rel="noopener" class="project-link">
-          View on GitHub →
-        </a>
-      </div>
+        <div class="case-row"><div class="case-label">Problem</div><p>Files on Production and UAT servers had to be backed up to S3 every day, and each server kept its data in different directories.</p></div>
+        <div class="case-row"><div class="case-label">Approach</div><p>One script, parameterised by server. It discovers storage directories at runtime instead of hard-coding paths, compresses only files modified in the last 24 hours, and uploads with a named AWS CLI profile.</p></div>
+        <div class="case-row"><div class="case-label">Result</div><p>Running live in Production and UAT. It removed the manual upload that used to keep the team working late after market close.</p></div>
+      </article>
+
+      <article class="case-card reveal">
+        <div class="case-top">
+          <div class="case-title">feeds_check</div>
+          <span class="project-env">Brokerage client · PROD</span>
+        </div>
+        <div class="case-row"><div class="case-label">Problem</div><p>Exchange data feeds (NSE, BSE, MCX) had to be checked by hand before every market open, and when data stopped coming in, it was slow to tell whether the problem was the feed or something else.</p></div>
+        <div class="case-row"><div class="case-label">Approach</div><p>A script that can be run at any moment. It detects the adapters automatically, with a fallback detection method, and shows version info, multicast IPs and feed activity. It can be filtered by segment.</p></div>
+        <div class="case-row"><div class="case-label">Result</div><p>Gives an instant answer on whether exchange data is flowing, replaced the manual checking, and speeds up diagnosis. Saves roughly 20–35 minutes every morning before market open.</p></div>
+      </article>
+
+      <article class="case-card reveal">
+        <div class="case-top">
+          <div class="case-title">spans_check</div>
+          <span class="project-env">Brokerage client · PROD</span>
+        </div>
+        <div class="case-row"><div class="case-label">Problem</div><p>The same span-file check had to be done by hand every day across 20 servers, which was tedious and easy to miss, and the expected date differs by exchange and by day of the week.</p></div>
+        <div class="case-row"><div class="case-label">Approach</div><p>A script that checks every instance and encodes the date rules: on Saturdays NSCCL/BSE files are expected for the next Monday, while MCX files are expected for the previous day. It flags missing or outdated segments per exchange.</p></div>
+        <div class="case-row"><div class="case-label">Result</div><p>Replaced the daily manual check across 20 servers and saves roughly 20–35 minutes every morning before market open. Missing or outdated files show up per exchange instead of being spotted by eye.</p></div>
+      </article>
 
     </div>
+
+    <article class="case-card wide reveal" style="margin-top:24px">
+      <div class="case-top">
+        <div class="case-title">Incident story: primary server outage</div>
+        <span class="project-env">Production · failover</span>
+      </div>
+      <div class="case-row"><div class="case-label">What broke</div><p>A primary production server went down. The infra team's RCA later traced it to a firmware issue.</p></div>
+      <div class="case-row"><div class="case-label">What I did</div><p>Told my manager first, then started switching to the backup server. In parallel I kept the manager updated and checked whether any other servers at the same location were affected.</p></div>
+      <div class="case-row"><div class="case-label">Outcome</div><p>The backup was live in about 20 minutes. The switchover itself took around 15 minutes, including my validation and the configuration changes after the switch.</p></div>
+      <div class="case-row"><div class="case-label">What I took from it</div><p>Communicate first, check how far the problem spreads, then fix. It is also why I automate manual steps: fewer hand-run procedures means fewer incidents of this kind caused by human error.</p></div>
+    </article>
   </div>
 </section>
 
 <!-- ─── EDUCATION ─────────────────────────────────────────────── -->
 <section id="education" class="section-pad">
   <div class="container">
-    <p class="section-label reveal">// education & certifications</p>
+    <p class="section-label reveal">// education &amp; certifications</p>
     <h2 class="section-title reveal">Learning Never Stops</h2>
     <div class="divider reveal"></div>
 
@@ -1317,7 +1522,7 @@
         <div class="edu-icon">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
         </div>
-        <div class="edu-degree">Diploma — Computer Engineering & IT Infrastructure</div>
+        <div class="edu-degree">Diploma — Computer Engineering &amp; IT Infrastructure</div>
         <div class="edu-college">NTTF (Nettur Technical Training Foundation)</div>
         <div class="edu-year">2021 — 2024</div>
       </div>
@@ -1333,26 +1538,31 @@
         </div>
         <div class="cert-item">
           <div class="cert-dot"></div>
-          <span class="cert-name">AI Fluency: Framework & Foundations</span>
-          <span class="cert-issuer">Anthropic · Apr 2026</span>
-        </div>
-        <div class="cert-item">
-          <div class="cert-dot"></div>
-          <span class="cert-name">CCNA Modules 1, 2 & 3</span>
+          <span class="cert-name">CCNA Coursework (Modules 1, 2 &amp; 3)</span>
           <span class="cert-issuer">Cisco Networking Academy · Aug 2023</span>
         </div>
-        <div class="cert-item">
+      </div>
+      <p class="cert-sub">Training &amp; simulations</p>
+      <div class="cert-list">
+        <div class="cert-item small">
           <div class="cert-dot"></div>
-          <span class="cert-name">Masterclass: Ground Control Station Operations</span>
-          <span class="cert-issuer">ITCA (Indian Technology Congress Association) · Feb 2024</span>
+          <span class="cert-name">AI Fluency: Framework &amp; Foundations</span>
+          <span class="cert-issuer">Anthropic · Apr 2026</span>
         </div>
-        <div class="cert-item">
+        <div class="cert-item small">
           <div class="cert-dot"></div>
           <span class="cert-name">Cyber Security Job Simulation</span>
           <span class="cert-issuer">Deloitte via Forage · Aug 2025</span>
         </div>
+        <div class="cert-item small">
+          <div class="cert-dot"></div>
+          <span class="cert-name">Masterclass: Ground Control Station Operations</span>
+          <span class="cert-issuer">ITCA · Feb 2024</span>
+        </div>
       </div>
     </div>
+
+    <p class="lang-line reveal">Languages: English (professional), Tamil (native), Telugu and Hindi (conversational).</p>
   </div>
 </section>
 
@@ -1365,9 +1575,11 @@
     <div class="achievement-card reveal">
       <div class="achievement-badge">🥉</div>
       <div class="achievement-info">
-        <h3>3rd Prize — Pan India Cansat & Drone Applications Competition</h3>
-        <p class="ach-org">Dayananda Sagar University · Organised by CSST & Dept. of Aerospace Engineering · May 2024</p>
-        <p>Competed in a two-day national-level technical competition against teams from institutions across India, demonstrating systems thinking, problem-solving under pressure, and the ability to deliver technical results in a competitive environment.</p>
+        <h3>3rd Prize — Pan India Cansat &amp; Drone Applications Competition</h3>
+        <p class="ach-org">Dayananda Sagar University · Organised by CSST &amp; Dept. of Aerospace Engineering · May 2024</p>
+        <span class="ach-role">Team Lead</span>
+        
+        <p>Led my team through a two-day national-level technical competition against teams from institutions across India, demonstrating leadership, systems thinking, problem-solving under pressure, and the ability to deliver technical results in a competitive environment. My hands-on part: I wrote the core code and tuned the sensor sensitivity through repeated testing.</p>
       </div>
     </div>
   </div>
@@ -1380,34 +1592,32 @@
       <p class="section-label" style="text-align:center">// get in touch</p>
       <h2 class="section-title" style="text-align:center">Let's Work Together</h2>
       <p style="color:var(--muted); font-size:0.95rem; margin-top:12px;">
-        Open to new opportunities in Backend Engineering, DevOps, Cloud Infrastructure, or Automation roles. Let's build something reliable.
+        Open to roles in Site Reliability, Production Engineering, Cloud/DevOps, and Systems Engineering. Let's build something reliable.
       </p>
       <div class="contact-links">
         <a href="mailto:rohithdharshan05@gmail.com" class="contact-link">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           rohithdharshan05@gmail.com
         </a>
-        <a href="https://www.linkedin.com/in/rohith-dharshan8" target="_blank" rel="noopener" class="contact-link">
+        <a href="https://www.linkedin.com/in/rohith-dharshan8" target="_blank" rel="noopener noreferrer" class="contact-link">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
         </a>
-        <a href="https://github.com/Rohz08" target="_blank" rel="noopener" class="contact-link">
+        <a href="https://github.com/Rohz08" target="_blank" rel="noopener noreferrer" class="contact-link">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
           GitHub
-        </a>
-        <a href="tel:+919962137171" class="contact-link">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-          +91 99621 37171
         </a>
       </div>
     </div>
   </div>
 </section>
 
+</main>
+
 <!-- ─── FOOTER ────────────────────────────────────────────────── -->
 <footer>
   <div class="container">
-    <p>Designed & Built by <span>Rohith Dharshan H</span> · © 2026 · All rights reserved.</p>
+    <p>Designed &amp; Built by <span>Rohith Dharshan H</span> · © 2026 · All rights reserved.</p>
   </div>
 </footer>
 
@@ -1418,15 +1628,17 @@
 
 <!-- ─── JAVASCRIPT ─────────────────────────────────────────────── -->
 <script>
-  // ── Theme Toggle ──────────────────────────────────────────
+  // ── Theme Toggle (storage wrapped so it never breaks the page) ──
   const html = document.documentElement;
   const themeBtn = document.getElementById('themeToggle');
-  const stored = localStorage.getItem('theme') || 'dark';
+  let stored = 'dark';
+  try { stored = localStorage.getItem('theme') || 'dark'; } catch (e) {}
   html.setAttribute('data-theme', stored);
   themeBtn.addEventListener('click', () => {
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    themeBtn.setAttribute('aria-pressed', next === 'light');
+    try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
   // ── Hamburger ─────────────────────────────────────────────
@@ -1435,6 +1647,7 @@
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
     mobileMenu.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', hamburger.classList.contains('open'));
   });
   document.querySelectorAll('.mob-link').forEach(link => {
     link.addEventListener('click', () => {
@@ -1466,13 +1679,12 @@
   // ── Scroll reveal ─────────────────────────────────────────
   const reveals = document.querySelectorAll('.reveal, .reveal-left');
   const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
+    entries.forEach((e) => {
       if (e.isIntersecting) {
-        // Stagger siblings
         const siblings = e.target.parentElement.querySelectorAll('.reveal, .reveal-left');
         let delay = 0;
         siblings.forEach((sib, idx) => {
-          if (sib === e.target) delay = idx * 80;
+          if (sib === e.target) delay = Math.min(idx, 4) * 80;
         });
         setTimeout(() => e.target.classList.add('visible'), delay);
         revealObs.unobserve(e.target);
