@@ -1788,7 +1788,7 @@
 </div>
 
 <script>
-// ── Play mode: mascot "Bit", XP, achievements, sounds (off by default) ──
+// ── Play mode: mascot "Bit" (+ optional pixel "Terminal Bot" skin), XP, achievements, sounds (off by default) ──
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
@@ -1798,13 +1798,69 @@
                   set(k,v){ try { localStorage.setItem(k,v); } catch (e) {} } };
   const rand = (a,b) => a + Math.random() * (b - a);
   const pick = a => a[Math.floor(Math.random() * a.length)];
+  const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
 
   const playBtn = $('playToggle'), bit = $('bit'), bitSvg = $('bitSvg'), say = $('bitSay'),
         hudLv = $('hudLv'), hudFill = $('hudFill'), hudBar = $('hudBar'), hudXp = $('hudXp'),
         achBtn = $('achBtn'), achCount = $('achCount'), achPanel = $('achPanel'), sndBtn = $('sndBtn'),
         toasts = $('toasts'), quest = $('quest'), themeBtn = $('themeToggle');
+  // ── Cuter Bit artwork (keeps every class hook the page CSS animates) ──
+  const BIT_EYE = cx => '<g class="eye" transform="translate(' + cx + ' 66)"><g class="eye-open"><ellipse rx="11" ry="13" fill="#fff"/><g class="pupil"><ellipse cy="2" rx="8.5" ry="11" fill="#1E3A8A"/><ellipse cy="3" rx="5" ry="7" fill="#0B0F19"/><circle cx="-3" cy="-4" r="4" fill="#fff"/><circle cx="3" cy="7" r="1.8" fill="#fff"/><path class="spark-eye" d="M0 -6 L1.6 -1.6 L6 0 L1.6 1.6 L0 6 L-1.6 1.6 L-6 0 L-1.6 -1.6Z" fill="#fff"/></g></g><path class="eye-closed" d="M-9 2 Q0 9 9 2" fill="none" stroke="#1E293B" stroke-width="2.6" stroke-linecap="round"/><path class="eye-happy" d="M-9 5 Q0 -7 9 5" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/></g>';
+  bitSvg.innerHTML =
+    '<ellipse cx="60" cy="145" rx="26" ry="4.5" fill="rgba(0,0,0,.3)"/><g class="bit-flip">' +
+    '<g class="leg-l"><rect x="44" y="124" width="12" height="16" rx="6" fill="#1E293B"/><ellipse cx="50" cy="141" rx="10" ry="4.5" fill="#F9FAFB"/></g>' +
+    '<g class="leg-r"><rect x="64" y="124" width="12" height="16" rx="6" fill="#1E293B"/><ellipse cx="70" cy="141" rx="10" ry="4.5" fill="#F9FAFB"/></g>' +
+    '<rect x="40" y="98" width="40" height="32" rx="15" fill="#2563EB"/><rect x="50" y="113" width="20" height="10" rx="5" fill="#1D4ED8"/>' +
+    '<line x1="55" y1="102" x2="55" y2="110" stroke="#F9FAFB" stroke-width="2" stroke-linecap="round"/><line x1="65" y1="102" x2="65" y2="110" stroke="#F9FAFB" stroke-width="2" stroke-linecap="round"/>' +
+    '<rect x="30" y="102" width="12" height="20" rx="6" fill="#2563EB" transform="rotate(10 36 104)"/><circle cx="33" cy="123" r="5.5" fill="#FFE0C2"/>' +
+    '<g class="arm-r"><rect x="78" y="102" width="12" height="20" rx="6" fill="#2563EB" transform="rotate(-10 84 104)"/><circle cx="87" cy="123" r="5.5" fill="#FFE0C2"/></g>' +
+    '<ellipse cx="60" cy="62" rx="40" ry="36" fill="#FFE0C2"/>' +
+    '<path d="M22 58 C18 14 102 14 98 58 C94 42 86 36 78 42 C72 30 64 32 60 42 C54 32 46 30 42 42 C34 36 26 42 22 58Z" fill="#1E293B"/>' +
+    '<path d="M58 22 C52 6 72 2 68 16 C66 10 60 10 62 22Z" fill="#1E293B"/>' +
+    '<path d="M18 56 C16 0 104 0 102 56" fill="none" stroke="#3B82F6" stroke-width="6" stroke-linecap="round"/>' +
+    '<rect x="9" y="48" width="15" height="28" rx="7.5" fill="#3B82F6"/><rect x="12.5" y="54" width="8" height="16" rx="4" fill="#93C5FD" opacity=".55"/>' +
+    '<rect x="96" y="48" width="15" height="28" rx="7.5" fill="#3B82F6"/><rect x="99.5" y="54" width="8" height="16" rx="4" fill="#93C5FD" opacity=".55"/>' +
+    BIT_EYE(45) + BIT_EYE(75) +
+    '<ellipse cx="31" cy="79" rx="7" ry="4" fill="#FB7185" opacity=".6"/><ellipse cx="89" cy="79" rx="7" ry="4" fill="#FB7185" opacity=".6"/>' +
+    '<path class="m m-smile" d="M53 82 Q56.5 87 60 82 Q63.5 87 67 82" fill="none" stroke="#9F1239" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<path class="m m-open" d="M52 80 Q60 95 68 80Z" fill="#9F1239"/>' +
+    '<path class="m m-flat" d="M55 83 L65 83" fill="none" stroke="#9F1239" stroke-width="2.2" stroke-linecap="round"/>' +
+    '<ellipse class="m m-o" cx="60" cy="84" rx="3.6" ry="4.6" fill="#9F1239"/>' +
+    '<text class="x x-think" x="100" y="22" font-size="22" font-weight="800" fill="#60A5FA">?</text>' +
+    '<text class="x x-surprise" x="100" y="22" font-size="22" font-weight="800" fill="#F59E0B">!</text>' +
+    '<text class="x x-sleep" x="102" y="30" font-size="16" font-weight="800" fill="#93C5FD">z</text>' +
+    '<text class="x x-sleep" x="110" y="18" font-size="11" font-weight="800" fill="#93C5FD">z</text>' +
+    '<path class="x x-spark" d="M12 28 L14 34 L20 36 L14 38 L12 44 L10 38 L4 36 L10 34Z" fill="#FBBF24"/>' +
+    '<path class="x x-spark" d="M106 40 L107.5 44 L112 45.5 L107.5 47 L106 51 L104.5 47 L100 45.5 L104.5 44Z" fill="#FBBF24"/></g>';
   const pupils = bit.querySelectorAll('.pupil');
-  let playOn = false, soundOn = true;
+  let playOn = false, soundOn = true, skin = 'bit';
+
+  // ── Extra styles (self-contained, so no other CSS needs to change) ──
+  const css = document.createElement('style');
+  css.textContent =
+    '#bit{bottom:calc(10px + env(safe-area-inset-bottom,0px));contain:layout style}' +
+    '#bit svg{transform-origin:50% 100%;will-change:transform}' +
+    '#bitBot{display:none;position:absolute;left:50%;bottom:6px;width:96px;height:102px;margin-left:-48px;' +
+    'image-rendering:pixelated;pointer-events:auto;cursor:pointer;touch-action:manipulation;' +
+    'filter:drop-shadow(0 0 1.5px rgba(34,211,238,.9))}' +
+    '#bit.skin-bot svg{display:none}#bit.skin-bot #bitBot{display:block}' +
+    '@media (max-width:480px){#bitBot{width:64px;height:68px;margin-left:-32px}}' +
+    '.hud-btn{touch-action:manipulation}#bit .arm-r{transform-origin:84px 104px}' +
+    '.play-hint{position:fixed;left:50%;top:calc(66px + env(safe-area-inset-top,0px));transform:translate(-50%,-6px);z-index:1200;' +
+    'max-width:calc(100vw - 24px);background:var(--card);color:var(--text);border:1px solid var(--accent);border-radius:20px;' +
+    'padding:6px 14px;font-family:var(--font-mono);font-size:.7rem;text-align:center;opacity:0;pointer-events:none;' +
+    'transition:opacity .35s ease,transform .35s ease}.play-hint.show{opacity:1;transform:translate(-50%,0)}';
+  document.head.appendChild(css);
+
+  // ── Pixel Terminal Bot canvas + skin button ──
+  const bot = document.createElement('canvas');
+  bot.id = 'bitBot'; bot.width = 32; bot.height = 34; bot.setAttribute('aria-hidden', 'true');
+  bit.appendChild(bot);
+  const bg = bot.getContext('2d');
+  const skinBtn = document.createElement('button');
+  skinBtn.className = 'hud-btn'; skinBtn.id = 'skinBtn'; skinBtn.type = 'button';
+  skinBtn.title = 'Switch mascot'; skinBtn.setAttribute('aria-label', 'Switch mascot'); skinBtn.textContent = '🤖';
+  $('hud').insertBefore(skinBtn, sndBtn);
 
   // ── Sound (generated in the browser, no files) ──
   let actx = null;
@@ -1833,11 +1889,17 @@
   };
   const sfx = n => { if (playOn && soundOn && SFX[n]) SFX[n](); };
 
-  // ── Mascot ──
-  let x = 24, target = 24, mood = 'idle', moodUntil = 0, mx = innerWidth / 2, my = innerHeight / 2;
+  // ── Mascot state ──
+  let x = 24, vx = 0, target = 24, mood = 'idle', moodUntil = 0, mx = innerWidth / 2, my = innerHeight / 2;
   let lastInput = performance.now(), lastT = 0, nextWander = 0, raf = null, sayTimer = null, sayAt = 0;
+  let isWalking = false, bw = 88, bh = 110, tx = 0, ty = 0, sx = 0, sy = 0, blinkAt = 2;
   const maxX = () => Math.max(20, innerWidth - (bit.offsetWidth || 88) - 84);
-  const place = () => { bit.style.transform = 'translate3d(' + x + 'px,0,0)'; };
+  const measure = () => { bw = bit.offsetWidth || 88; bh = bit.offsetHeight || 110; };
+  const place = () => {
+    const px = skin === 'bot' ? Math.round(x) : x.toFixed(2);
+    bit.style.transform = 'translate3d(' + px + 'px,0,0)';
+  };
+  const L = (a, b) => skin === 'bot' ? b : a;
 
   function setMood(m, ms) {
     mood = m; bit.dataset.mood = m;
@@ -1851,45 +1913,111 @@
     say.classList.add('show'); sayAt = performance.now();
     clearTimeout(sayTimer); sayTimer = setTimeout(() => say.classList.remove('show'), ms || 2800);
   }
-  function walking(on) { bit.classList.toggle('walking', on); }
-  function look(px, py) { pupils.forEach(p => { p.style.transform = 'translate(' + px.toFixed(2) + 'px,' + py.toFixed(2) + 'px)'; }); }
+  function walking(on) { if (on === isWalking) return; isWalking = on; bit.classList.toggle('walking', on); }
+  function look(px, py) { tx = px; ty = py; }
 
+  // ── Pixel Terminal Bot renderer (32x34 grid, integer-scaled by CSS) ──
+  const P = { K:'#020617', SL:'#334155', SH:'#64748B', NV:'#1E293B', CY:'#22D3EE', CY2:'#A5F3FC', CD:'#0E7490',
+              V:'#020617', SC:'#0B3A45', W:'#FFFFFF', Z:'#93C5FD' };
+  function drawBot(t) {
+    const g = bg, m = mood, pulse = Math.floor(t * 2) % 2;
+    g.clearRect(0, 0, 32, 34);
+    let bob = 0, la = 0, ra = 0, ll = 0, rl = 0;
+    if (isWalking) { const f = Math.floor(t * 9) % 4; bob = f % 2; ll = f === 1 ? 1 : 0; rl = f === 3 ? 1 : 0; la = f === 1 ? -1 : f === 3 ? 1 : 0; ra = -la; }
+    else if (m === 'excited' || m === 'cheer') { bob = Math.floor(t * 7) % 2 ? 2 : 0; la = ra = -2; }
+    else if (m === 'surprised') { bob = 1; la = ra = -3; }
+    else if (m !== 'sleep') { bob = Math.floor(t * 1.6) % 2; }
+    const oy = 1 - bob;
+    const R = (px, py, w, h, c) => { g.fillStyle = c; g.fillRect(px, py + oy, w, h); };
+    g.fillStyle = 'rgba(2,6,23,0.35)'; g.fillRect(8, 33, 16, 1);
+    R(10, 29, 6, 3 - ll, P.K); R(11, 29, 4, 1, P.CY); R(17, 29, 6, 3 - rl, P.K); R(18, 29, 4, 1, P.CY);
+    R(7, 21, 18, 8, P.K); R(8, 22, 16, 6, P.NV); R(8, 22, 16, 1, P.CD);
+    R(12, 23, 8, 4, P.K); R(13, 24, 6, 2, P.V); R(13, 24, 1, 1, P.CY); R(14, 25, 1, 1, P.CY); if (pulse) R(16, 25, 3, 1, P.CY);
+    R(3, 21, 5, 4, P.K); R(4, 22, 3, 2, P.CY); R(5, 25 + la, 3, 4, P.K); R(6, 26 + la, 1, 2, P.SH);
+    R(24, 21, 5, 4, P.K); R(25, 22, 3, 2, P.CY);
+    if (m !== 'wave') { R(24, 25 + ra, 3, 4, P.K); R(25, 26 + ra, 1, 2, P.SH); }
+    R(15, 3, 2, 4, P.K); R(15, 4, 2, 1, P.SH); R(14, 0, 4, 3, P.K); R(15, 1, 2, 1, pulse ? P.CY : P.CY2);
+    R(4, 6, 24, 14, P.K); R(5, 7, 22, 12, P.SL); R(5, 7, 22, 1, P.SH); R(5, 18, 22, 1, P.CD);
+    R(0, 9, 4, 8, P.K); R(1, 10, 2, 6, P.CY); R(28, 9, 4, 8, P.K); R(29, 10, 2, 6, P.CY);
+    R(6, 9, 20, 8, P.K); R(7, 10, 18, 6, P.V); R(7, 13, 18, 1, P.SC);
+    if (m === 'wave') { const w = Math.floor(t * 5) % 2; R(27, 20 - w * 2, 5, 4, P.K); R(28, 21 - w * 2, 3, 2, P.SH); }
+    const ex = m === 'think' ? -1 : (sx > 1.1 ? 1 : sx < -1.1 ? -1 : 0);
+    const blink = (m === 'idle' || isWalking) && t > blinkAt && t < blinkAt + 0.14;
+    if (t >= blinkAt + 0.14) blinkAt = t + 2 + Math.random() * 2.5;
+    if (m === 'excited' || m === 'cheer') {
+      R(9, 13, 1, 1, P.CY); R(10, 12, 2, 1, P.CY); R(12, 13, 1, 1, P.CY);
+      R(19, 13, 1, 1, P.CY); R(20, 12, 2, 1, P.CY); R(22, 13, 1, 1, P.CY);
+      R(14, 14, 4, 1, P.CY); R(13, 13, 1, 1, P.CY); R(18, 13, 1, 1, P.CY);
+    } else if (m === 'surprised') {
+      R(10, 10, 4, 5, P.CY); R(18, 10, 4, 5, P.CY); R(11, 10, 1, 1, P.W); R(19, 10, 1, 1, P.W); R(15, 14, 2, 2, P.CY);
+    } else if (m === 'sleep') {
+      R(10, 12, 4, 1, P.CY); R(18, 12, 4, 1, P.CY); R(15, 14, 2, 1, P.CY);
+      const z = Math.floor(t * 1.5) % 2; R(27, 1 + z, 3, 1, P.Z); R(28, 2 + z, 1, 1, P.Z); R(27, 3 + z, 3, 1, P.Z);
+    } else if (blink) {
+      R(10 + ex, 13, 4, 1, P.CY); R(18 + ex, 13, 4, 1, P.CY); R(15, 14, 3, 1, P.CY);
+    } else {
+      R(10 + ex, 11, 4, 1, P.CY); R(9 + ex, 12, 5, 2, P.CY); R(18 + ex, 11, 4, 1, P.CY); R(18 + ex, 12, 5, 2, P.CY);
+      R(12 + ex, 12, 1, 1, P.W); R(20 + ex, 12, 1, 1, P.W); R(15, 14, 3, 1, P.CY); R(18, 13, 1, 1, P.CY);
+    }
+  }
+
+  // ── Main loop: eased movement, smoothed eyes, subtle lean ──
   function frame(t) {
     raf = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (t - lastT) / 1000 || 0.016); lastT = t;
     if (moodUntil && t > moodUntil && mood !== 'sleep') setMood('idle');
-    if (t - lastInput > 16000 && mood !== 'sleep') { setMood('sleep'); target = x; speak('zzz…', 2200); }
-    if (mood === 'sleep') { walking(false); look(0, 0); }
+    if (t - lastInput > 16000 && mood !== 'sleep') { setMood('sleep'); target = x; speak(L('zzz…', 'sleep mode…'), 2200); }
+    if (mood === 'sleep') { vx += (0 - vx) * Math.min(1, dt * 10); walking(false); look(0, 0); }
     else {
       if (t > nextWander && mood === 'idle' && Math.abs(target - x) < 3) { target = rand(20, maxX()); nextWander = t + rand(3500, 7500); }
       const d = target - x;
-      if (Math.abs(d) > 2) { x += Math.sign(d) * Math.min(Math.abs(d), 70 * dt); walking(true); } else walking(false);
+      const want = Math.abs(d) > 2 ? Math.sign(d) * Math.min(70, Math.abs(d) * 3) : 0;
+      vx += (want - vx) * Math.min(1, dt * 8);
+      walking(Math.abs(vx) > 6);
       if (mood === 'think') look(-2.4, -3);
       else {
-        const r = bit.getBoundingClientRect();
-        const dx = mx - (r.left + r.width / 2), dy = my - (r.top + r.height * 0.4);
-        const dist = Math.hypot(dx, dy) || 1, k = Math.min(1, dist / 200);
+        const cx = x + bw / 2, cy = innerHeight - 10 - bh * 0.6;
+        const dx = mx - cx, dy = my - cy, dist = Math.hypot(dx, dy) || 1, k = Math.min(1, dist / 200);
         look(dx / dist * 3.2 * k, dy / dist * 3.2 * k);
       }
     }
+    x = clamp(x + vx * dt, 0, maxX());
+    const e = Math.min(1, dt * 14); sx += (tx - sx) * e; sy += (ty - sy) * e;
+    if (skin === 'bit') {
+      const s = 'translate(' + (sx * 0.75).toFixed(2) + 'px,' + (sy * 0.75).toFixed(2) + 'px)';
+      for (let i = 0; i < pupils.length; i++) pupils[i].style.transform = s;
+      bitSvg.style.transform = 'rotate(' + clamp(vx * 0.03, -2, 2).toFixed(2) + 'deg)';
+    } else drawBot(t / 1000);
     place();
   }
   function wake() {
     lastInput = performance.now();
-    if (playOn && mood === 'sleep') { setMood('surprised', 900); speak("Oh! You're back."); }
+    if (playOn && mood === 'sleep') { setMood('surprised', 900); speak(L("Oh! You're back.", 'Back online.')); }
   }
 
+  // ── Speech lines (Bit and Terminal Bot each have their own voice) ──
   const REACT = [
-    ['.project-card', 'excited', ['Ooh, shipped automation!', 'Scripts that saved hours.', 'Production-grade, nice!']],
-    ['.skill-category', 'think', ['Hmm… Linux, AWS, Bash. Solid stack.', 'Strong toolbox.']],
-    ['.soft-card', 'cheer', ['Soft skills matter too.', 'Calm under pressure!']],
-    ['.timeline-item', 'think', ['Real production experience.', 'Incidents, backups, failover.']],
-    ['.stat-card', 'surprised', ['Numbers!', 'Those add up.']],
-    ['.cert-item', 'cheer', ['Always learning.', 'Nice certs.']],
-    ['.edu-card', 'think', ['Studying while working.', 'BCA alongside a full-time job.']],
-    ['.achievement-card', 'cheer', ['National podium, and Team Lead!', '3rd place, pan-India.']],
-    ['.contact-link', 'wave', ['Say hi! He replies.', 'Go on, send a mail.']]
+    ['.project-card', 'excited', ['Ooh, shipped automation!', 'Scripts that saved hours.', 'Production-grade, nice!', 'Less manual work, fewer mistakes.']],
+    ['.skill-category', 'think', ['Hmm… Linux, AWS, Bash. Solid stack.', 'Strong toolbox.', 'Bash that does not break.']],
+    ['.soft-card', 'cheer', ['Soft skills matter too.', 'Calm under pressure!', 'Good teammate energy.']],
+    ['.timeline-item', 'think', ['Real production experience.', 'Incidents, backups, failover.', 'Pre-market checks, every morning.']],
+    ['.stat-card', 'surprised', ['Numbers!', 'Those add up.', 'Small scripts, big impact.']],
+    ['.cert-item', 'cheer', ['Always learning.', 'Nice certs.', 'Never stops learning.']],
+    ['.edu-card', 'think', ['Studying while working.', 'BCA alongside a full-time job.', 'That takes discipline.']],
+    ['.achievement-card', 'cheer', ['National podium, and Team Lead!', '3rd place, pan-India.', 'Leader off the terminal too.']],
+    ['.contact-link', 'wave', ['Say hi! He replies.', 'Go on, send a mail.', 'Do not be shy!']]
   ];
+  const BOT_REACT = {
+    '.project-card': ['Deployed. Zero downtime.', 'Another manual step, deleted.', 'exit 0, clean run.'],
+    '.skill-category': ['bash, rhel, aws… solid stack.', 'grep found no weak spots.'],
+    '.soft-card': ['Uptime needs people skills.', 'Calm under pressure. Status: green.'],
+    '.timeline-item': ['Real incidents. Real failovers.', 'Switched to backup. Users never noticed.'],
+    '.stat-card': ['Metrics look healthy.', 'Numbers: nominal.'],
+    '.cert-item': ['Learning: always running.', 'Certified. Cron renewed.'],
+    '.edu-card': ['BCA plus full-time. Multithreading!', 'Studying while on call.'],
+    '.achievement-card': ['3rd place nationally. Podium!', 'Team Lead role: confirmed.'],
+    '.contact-link': ['ping rohith: he replies.', 'Send mail. Expect 200 OK.']
+  };
   const REACT_SEL = REACT.map(r => r[0]).join(',');
   let lastEl = null, lastReactT = 0;
   document.addEventListener('pointerover', e => {
@@ -1901,8 +2029,8 @@
     const rule = REACT.find(r => el.matches(r[0]));
     if (el.matches('.project-card')) unlock('builder');
     setMood(rule[1], 2600);
-    if (!reduce) { const r = el.getBoundingClientRect(); target = Math.max(20, Math.min(maxX(), r.left + r.width / 2 - 44)); }
-    speak(pick(rule[2]), 2600);
+    if (!reduce) { const r = el.getBoundingClientRect(); target = clamp(r.left + r.width / 2 - 44, 20, maxX()); }
+    speak(pick(skin === 'bot' ? BOT_REACT[rule[0]] : rule[2]), 2600);
   });
 
   // ── Game state ──
@@ -1925,6 +2053,12 @@
     education: 'Always learning.', achievements: 'National podium, and he was Team Lead.',
     contact: 'Say hi! He replies.'
   };
+  const BOT_SEC = {
+    about: "Booting… hi, I'm Bit.bot.", skills: 'Loading skills: bash, linux, aws.',
+    experience: 'Reading production logs…', projects: 'Hover a card. I react!',
+    education: 'Always learning. cron: daily.', achievements: 'Team Lead. Podium finish.',
+    contact: 'Open connection? Say hi!'
+  };
 
   function renderPanel() {
     achPanel.textContent = '';
@@ -1943,7 +2077,7 @@
     const lv = Math.min(10, Math.floor(xp / 100) + 1);
     hudXp.textContent = xp + ' XP'; hudLv.textContent = 'LV ' + lv;
     hudFill.style.width = Math.min(100, xp / 10) + '%'; hudBar.setAttribute('aria-valuenow', String(xp));
-    if (lastLv && lv > lastLv) { sfx('level'); setMood('cheer', 1800); speak('Level up! LV ' + lv, 2400); }
+    if (lastLv && lv > lastLv) { sfx('level'); setMood('cheer', 1800); speak(L('Level up! LV ', 'Build passed. LV ') + lv, 2400); }
     lastLv = lv;
   }
   function toast(a) {
@@ -1966,7 +2100,7 @@
   function maybeQuest() {
     if (questShown || !playOn) return;
     if (got.has('complete') || (got.has('explorer') && maxPct > 0.97)) {
-      questShown = true; quest.hidden = false; setMood('cheer', 3000); speak('Quest complete!', 3000); sfx('ach');
+      questShown = true; quest.hidden = false; setMood('cheer', 3000); speak(L('Quest complete!', 'Quest complete. exit 0.'), 3000); sfx('ach');
     }
   }
   let ticking = false;
@@ -1979,7 +2113,7 @@
       const r = el.getBoundingClientRect();
       if (r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.35) {
         seen.add(id);
-        if (!spoken.has(id)) { spoken.add(id); speak(SEC_LINES[id], 3000, true); }
+        if (!spoken.has(id)) { spoken.add(id); speak((skin === 'bot' ? BOT_SEC : SEC_LINES)[id], 3000, true); }
       }
     });
     if (seen.has('skills')) unlock('skills');
@@ -1989,15 +2123,19 @@
 
   // ── Inputs ──
   let clicks = 0, clickT = 0;
-  bitSvg.addEventListener('pointerup', () => {
+  function onBitTap() {
     if (!playOn) return;
     const now = performance.now(); clicks = now - clickT < 4000 ? clicks + 1 : 1; clickT = now;
     wake(); setMood('surprised', 1100); sfx('blip');
-    speak(pick(['Hey!', 'Boop!', 'That tickles.', "I'm Bit!", 'Hire Rohith. He is good.']), 2200);
+    speak(pick(skin === 'bot'
+      ? ['Beep!', 'Boop. 200 OK.', 'Ow, that was a ping.', "I'm Bit.bot!", 'Hire Rohith. exit 0.']
+      : ['Hey!', 'Boop!', 'That tickles.', "I'm Bit!", 'Hire Rohith. He is good.', 'Need a script? Ask Rohith.']), 2200);
     unlock('hello');
     if (clicks >= 7) { clicks = 0; secret(); }
-  });
-  function secret() { unlock('secret'); setMood('cheer', 4000); speak('Cheat code accepted!', 3200); }
+  }
+  bitSvg.addEventListener('pointerup', onBitTap);
+  bot.addEventListener('pointerup', onBitTap);
+  function secret() { unlock('secret'); setMood('cheer', 4000); speak(L('Cheat code accepted!', 'sudo access granted!'), 3200); }
   const KON = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
   let ki = 0;
   addEventListener('keydown', e => {
@@ -2006,15 +2144,17 @@
     if (k === KON[ki]) { ki++; if (ki === KON.length) { ki = 0; secret(); } } else ki = k === KON[0] ? 1 : 0;
   });
   addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; wake(); }, { passive: true });
+  addEventListener('pointerdown', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
   addEventListener('touchstart', wake, { passive: true });
   addEventListener('scroll', () => { wake(); if (playOn && !ticking) { ticking = true; requestAnimationFrame(checkScroll); } }, { passive: true });
-  addEventListener('resize', () => { x = Math.min(x, maxX()); target = Math.min(target, maxX()); place(); });
+  addEventListener('resize', () => { measure(); x = Math.min(x, maxX()); target = Math.min(target, maxX()); place(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { lastInput = performance.now(); lastT = 0; } });
 
   themeBtn.addEventListener('click', () => {
     if (!playOn) return;
     const t = document.documentElement.getAttribute('data-theme');
     sfx(t === 'light' ? 'toLight' : 'toDark'); unlock('night');
-    setMood('cheer', 1800); speak(t === 'light' ? 'Lights on!' : 'Dark mode. Cozy.', 2200);
+    setMood('cheer', 1800); speak(t === 'light' ? L('Lights on!', 'Display: bright.') : L('Dark mode. Cozy.', 'Dark mode. Easy on the eyes.'), 2200);
   });
   document.querySelectorAll('a[download]').forEach(a => a.addEventListener('click', () => unlock('resume')));
 
@@ -2028,6 +2168,32 @@
   $('questClose').addEventListener('click', () => { quest.hidden = true; });
   $('questContact').addEventListener('click', () => { quest.hidden = true; });
 
+  // ── Skin switch ──
+  function setSkin(s, announce) {
+    skin = s === 'bot' ? 'bot' : 'bit';
+    bit.classList.toggle('skin-bot', skin === 'bot');
+    skinBtn.textContent = skin === 'bot' ? '🙂' : '🤖';
+    skinBtn.setAttribute('aria-label', skin === 'bot' ? 'Switch to Bit' : 'Switch to Terminal Bot');
+    if (skin === 'bit') { bitSvg.style.transform = ''; } else { drawBot(performance.now() / 1000); }
+    store.set('skin', skin); measure(); place();
+    if (announce) { setMood('surprised', 900); speak(skin === 'bot' ? 'Terminal Bot online.' : "Bit's back!", 2200); sfx('blip'); }
+  }
+  skinBtn.addEventListener('click', () => { if (playOn) setSkin(skin === 'bot' ? 'bit' : 'bot', true); });
+  if (store.get('skin') === 'bot') setSkin('bot', false);
+
+  // ── One-time hint when Play mode is switched on, then it fades away ──
+  let hintEl = null, hintTimer = null;
+  function showHint() {
+    if (!hintEl) {
+      hintEl = document.createElement('div');
+      hintEl.className = 'play-hint'; hintEl.setAttribute('role', 'status');
+      hintEl.textContent = 'Hover or tap cards, scroll, tap the mascot, or press 🤖 to switch skins';
+      document.body.appendChild(hintEl);
+    }
+    requestAnimationFrame(() => hintEl.classList.add('show'));
+    clearTimeout(hintTimer); hintTimer = setTimeout(() => hintEl.classList.remove('show'), 4500);
+  }
+
   // ── Toggle ──
   function setPlay(on, user) {
     playOn = on; body.classList.toggle('play', on);
@@ -2035,12 +2201,15 @@
     playBtn.classList.remove('play-new');
     if (on) {
       if (user) audio();
-      x = Math.min(x, maxX()); target = x; lastInput = performance.now(); nextWander = lastInput + 2500;
-      setMood('wave', 2800); speak("Hi! I'm Bit. Hover over things and I'll react.", 4200);
+      measure();
+      x = Math.min(x, maxX()); target = x; lastInput = performance.now(); nextWander = lastInput + 2500; lastT = 0;
+      setMood('wave', 2800); speak(skin === 'bot' ? "Booting… hi, I'm Bit.bot. Hover over things and I'll react." : "Hi! I'm Bit. Hover over things and I'll react.", 4200);
       renderPanel(); place();
+      if (skin === 'bot') drawBot(performance.now() / 1000);
       if (!reduce && !raf) raf = requestAnimationFrame(frame);
-      checkScroll(); if (user) sfx('blip');
+      checkScroll(); if (user) { sfx('blip'); showHint(); }
     } else {
+      if (hintEl) hintEl.classList.remove('show');
       if (raf) { cancelAnimationFrame(raf); raf = null; }
       say.classList.remove('show'); achPanel.hidden = true; achBtn.setAttribute('aria-expanded', 'false'); quest.hidden = true;
     }
