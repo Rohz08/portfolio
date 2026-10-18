@@ -997,6 +997,113 @@
     [data-theme="light"] .project-link,
     [data-theme="light"] .stat-number { color: #1D4ED8; }
 
+    /* ─── PLAY MODE (mascot, XP, achievements) ───────────────── */
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 34px;
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 20px; padding: 6px 12px; cursor: pointer;
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em;
+      transition: all var(--transition);
+    }
+    .play-btn:hover { border-color: var(--accent); color: var(--accent-lt); }
+    .play-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-lt); background: var(--accent-glow); }
+    .play-new::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #22C55E; animation: pulse 2s infinite; }
+    [data-theme="light"] .play-btn:hover, [data-theme="light"] .play-btn[aria-pressed="true"] { color: #1D4ED8; }
+
+    #bit, #hud, #toasts, #quest { display: none; }
+    body.play #bit { display: block; }
+    body.play #hud { display: flex; }
+    body.play #toasts { display: flex; }
+    body.play footer { padding-bottom: 120px; }
+
+    #bit { position: fixed; left: 0; bottom: 10px; width: 88px; height: 110px; z-index: 900; pointer-events: none; will-change: transform; }
+    #bit svg { width: 100%; height: 100%; overflow: visible; pointer-events: auto; cursor: pointer; display: block; }
+    .bit-say {
+      position: absolute; bottom: 100%; left: 50%; margin-bottom: 2px; width: max-content; max-width: 190px;
+      background: var(--card); color: var(--text); border: 1px solid var(--accent); border-radius: 12px;
+      padding: 6px 10px; font-size: 0.74rem; font-weight: 600; line-height: 1.4; pointer-events: none;
+      opacity: 0; transform: translateX(-50%) scale(0.92); transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .bit-say.show { opacity: 1; transform: translateX(-50%) scale(1); }
+    .bit-say.edge-l { left: 0; transform: none; } .bit-say.edge-r { left: auto; right: 0; transform: none; }
+
+    /* mascot parts */
+    #bit .eye-closed, #bit .eye-happy, #bit .m, #bit .x, #bit .spark-eye { display: none; }
+    #bit .m-smile { display: inline; }
+    #bit[data-mood="wave"] .m-smile, #bit[data-mood="excited"] .m-smile, #bit[data-mood="cheer"] .m-smile,
+    #bit[data-mood="think"] .m-smile, #bit[data-mood="sleep"] .m-smile, #bit[data-mood="surprised"] .m-smile { display: none; }
+    #bit[data-mood="wave"] .m-open, #bit[data-mood="excited"] .m-open, #bit[data-mood="cheer"] .m-open { display: inline; }
+    #bit[data-mood="think"] .m-flat, #bit[data-mood="sleep"] .m-flat { display: inline; }
+    #bit[data-mood="surprised"] .m-o { display: inline; }
+    #bit[data-mood="think"] .x-think, #bit[data-mood="surprised"] .x-surprise, #bit[data-mood="sleep"] .x-sleep,
+    #bit[data-mood="cheer"] .x-spark, #bit[data-mood="excited"] .x-spark { display: inline; }
+    #bit[data-mood="excited"] .spark-eye { display: inline; }
+    #bit[data-mood="sleep"] .eye-open, #bit[data-mood="cheer"] .eye-open { display: none; }
+    #bit[data-mood="sleep"] .eye-closed, #bit[data-mood="cheer"] .eye-happy { display: inline; }
+    #bit .arm-r { transform-origin: 80px 94px; }
+    #bit[data-mood="wave"] .arm-r { animation: bitWave 0.55s ease-in-out infinite; }
+    #bit[data-mood="excited"] .bit-flip, #bit[data-mood="cheer"] .bit-flip { animation: bitJump 0.5s ease-in-out infinite; }
+    #bit[data-mood="surprised"] .bit-flip { animation: bitJump 0.35s ease-out 2; }
+    #bit[data-mood="sleep"] .bit-flip { transform: rotate(5deg); transform-origin: 60px 140px; }
+    #bit.walking .bit-flip { animation: bitBob 0.35s ease-in-out infinite; }
+    #bit.walking .leg-l { animation: bitStepL 0.35s ease-in-out infinite; }
+    #bit.walking .leg-r { animation: bitStepR 0.35s ease-in-out infinite; }
+    .bit-flip { transform-box: view-box; }
+    @keyframes bitWave { 0%,100% { transform: rotate(-130deg); } 50% { transform: rotate(-165deg); } }
+    @keyframes bitJump { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes bitBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    @keyframes bitStepL { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes bitStepR { 0%,100% { transform: translateY(-4px); } 50% { transform: translateY(0); } }
+
+    /* HUD */
+    .hud {
+      position: fixed; top: 74px; right: 12px; z-index: 950; align-items: center; gap: 8px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 6px 10px;
+      font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    }
+    .hud-lv { color: var(--accent-lt); font-weight: 500; }
+    [data-theme="light"] .hud-lv { color: #1D4ED8; }
+    .hud-bar { width: 90px; height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .hud-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-lt)); transition: width 0.3s ease; }
+    .hud-btn {
+      background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+      font-family: var(--font-mono); font-size: 0.68rem; padding: 4px 8px; min-height: 28px; cursor: pointer;
+    }
+    .hud-btn:hover { border-color: var(--accent); }
+    .ach-panel {
+      position: absolute; top: calc(100% + 8px); right: 0; width: 270px; max-height: 60vh; overflow-y: auto;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 10px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 6px;
+    }
+    .ach-panel[hidden] { display: none; }
+    .ach-row { display: flex; gap: 8px; align-items: flex-start; font-size: 0.74rem; line-height: 1.4; color: var(--muted); }
+    .ach-row.got { color: var(--text); }
+    .ach-row b { display: block; font-family: var(--font-head); font-size: 0.78rem; color: var(--heading); }
+    .toasts {
+      position: fixed; top: 128px; right: 12px; z-index: 1100; flex-direction: column; gap: 8px;
+      width: min(300px, calc(100vw - 24px)); pointer-events: none;
+    }
+    .toast {
+      background: var(--card); border: 1px solid var(--accent); border-radius: 12px; padding: 10px 14px;
+      box-shadow: 0 10px 30px rgba(59,130,246,0.25); animation: fadeUp 0.35s ease both;
+    }
+    .toast small { display: block; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-lt); }
+    .toast strong { display: block; font-family: var(--font-head); color: var(--heading); font-size: 0.9rem; }
+    .toast span { font-size: 0.74rem; color: var(--muted); }
+    [data-theme="light"] .toast small { color: #1D4ED8; }
+    .quest {
+      position: fixed; left: 50%; bottom: 130px; transform: translateX(-50%); z-index: 1100;
+      width: min(380px, calc(100vw - 24px)); background: var(--card); border: 1px solid var(--accent);
+      border-radius: var(--radius-lg); padding: 22px; text-align: center; box-shadow: 0 20px 60px rgba(59,130,246,0.3);
+    }
+    .quest:not([hidden]) { display: block; }
+    body:not(.play) .quest { display: none !important; }
+    .quest h3 { font-family: var(--font-head); color: var(--heading); margin-bottom: 6px; }
+    .quest p { font-size: 0.88rem; color: var(--muted); margin-bottom: 16px; }
+    .quest .quest-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    @media (max-width: 768px) { .play-label { display: none; } .play-btn { padding: 6px 10px; } }
+    @media (max-width: 480px) { #bit { width: 72px; height: 90px; } .hud-xp { display: none; } .hud-bar { width: 60px; } }
+
     /* ─── ACCESSIBILITY ──────────────────────────────────────── */
     a:focus-visible, button:focus-visible {
       outline: 2px solid var(--accent-lt);
@@ -1046,6 +1153,10 @@
       <a href="#contact">Contact</a>
     </div>
     <div class="nav-right">
+      <button class="play-btn play-new" id="playToggle" aria-pressed="false" title="Play mode: mascot, XP and sounds (off by default)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="4"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg>
+        <span class="play-label">Play mode</span>
+      </button>
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"></button>
       <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -1612,6 +1723,332 @@
     btt.classList.toggle('visible', window.scrollY > 400);
   }, { passive: true });
   btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+<!-- ─── PLAY MODE: mascot, HUD, toasts ─────────────────────── -->
+<div id="bit" aria-hidden="true" data-mood="idle">
+  <div class="bit-say" id="bitSay"></div>
+  <svg id="bitSvg" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="60" cy="144" rx="26" ry="5" fill="rgba(0,0,0,0.25)"/>
+    <g class="bit-flip">
+      <g class="leg-l"><rect x="46" y="120" width="10" height="20" rx="5" fill="#1E293B"/><ellipse cx="51" cy="141" rx="8" ry="4" fill="#F9FAFB"/></g>
+      <g class="leg-r"><rect x="64" y="120" width="10" height="20" rx="5" fill="#1E293B"/><ellipse cx="69" cy="141" rx="8" ry="4" fill="#F9FAFB"/></g>
+      <rect x="38" y="84" width="44" height="42" rx="15" fill="#2563EB"/>
+      <rect x="50" y="106" width="20" height="12" rx="5" fill="#1D4ED8" opacity="0.7"/>
+      <line x1="56" y1="90" x2="56" y2="100" stroke="#F9FAFB" stroke-width="1.6" stroke-linecap="round"/><line x1="64" y1="90" x2="64" y2="100" stroke="#F9FAFB" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="29" y="90" width="12" height="26" rx="6" fill="#2563EB" transform="rotate(8 35 92)"/><circle cx="34" cy="118" r="5" fill="#FFD9B8"/>
+      <g class="arm-r"><rect x="79" y="90" width="12" height="26" rx="6" fill="#2563EB" transform="rotate(-8 85 92)"/><circle cx="86" cy="118" r="5" fill="#FFD9B8"/></g>
+      <path d="M22 56 C20 14 100 14 98 56 C98 78 90 86 60 88 C30 86 22 78 22 56Z" fill="#1E293B"/>
+      <ellipse cx="60" cy="58" rx="33" ry="30" fill="#FFD9B8"/>
+      <rect x="14" y="46" width="12" height="24" rx="6" fill="#3B82F6"/><rect x="94" y="46" width="12" height="24" rx="6" fill="#3B82F6"/>
+      <path d="M20 50 C20 6 100 6 100 50" fill="none" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/>
+      <path d="M27 50 C28 22 52 14 60 16 C70 14 92 24 93 50 C86 40 82 34 76 38 C72 30 66 30 60 40 C54 30 48 30 44 38 C38 34 34 40 27 50Z" fill="#1E293B"/>
+      <path d="M60 17 C56 6 66 2 70 8 C66 6 62 8 62 16Z" fill="#1E293B"/>
+      <g class="eye" transform="translate(46 62)">
+          <g class="eye-open"><ellipse rx="9" ry="11" fill="#fff"/><g class="pupil"><circle r="6.4" fill="#1E3A8A"/><circle r="3.4" fill="#0B0F19"/><circle cx="-2.2" cy="-2.8" r="2.3" fill="#fff"/><circle cx="2.4" cy="2.8" r="1" fill="#fff"/><path class="spark-eye" d="M0 -5 L1.4 -1.4 L5 0 L1.4 1.4 L0 5 L-1.4 1.4 L-5 0 L-1.4 -1.4Z" fill="#fff"/></g></g>
+          <path class="eye-closed" d="M-8 2 Q0 8 8 2" fill="none" stroke="#1E293B" stroke-width="2.4" stroke-linecap="round"/>
+          <path class="eye-happy" d="M-8 4 Q0 -6 8 4" fill="none" stroke="#1E293B" stroke-width="2.6" stroke-linecap="round"/>
+        </g>
+      <g class="eye" transform="translate(74 62)">
+          <g class="eye-open"><ellipse rx="9" ry="11" fill="#fff"/><g class="pupil"><circle r="6.4" fill="#1E3A8A"/><circle r="3.4" fill="#0B0F19"/><circle cx="-2.2" cy="-2.8" r="2.3" fill="#fff"/><circle cx="2.4" cy="2.8" r="1" fill="#fff"/><path class="spark-eye" d="M0 -5 L1.4 -1.4 L5 0 L1.4 1.4 L0 5 L-1.4 1.4 L-5 0 L-1.4 -1.4Z" fill="#fff"/></g></g>
+          <path class="eye-closed" d="M-8 2 Q0 8 8 2" fill="none" stroke="#1E293B" stroke-width="2.4" stroke-linecap="round"/>
+          <path class="eye-happy" d="M-8 4 Q0 -6 8 4" fill="none" stroke="#1E293B" stroke-width="2.6" stroke-linecap="round"/>
+        </g>
+      <ellipse cx="37" cy="73" rx="6" ry="3.5" fill="#FB7185" opacity="0.45"/><ellipse cx="83" cy="73" rx="6" ry="3.5" fill="#FB7185" opacity="0.45"/>
+      <path class="m m-smile" d="M54 76 Q60 82 66 76" fill="none" stroke="#7F1D1D" stroke-width="2.2" stroke-linecap="round"/>
+      <path class="m m-open" d="M53 75 Q60 91 67 75Z" fill="#7F1D1D"/>
+      <path class="m m-flat" d="M55 78 L65 78" fill="none" stroke="#7F1D1D" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse class="m m-o" cx="60" cy="79" rx="3.6" ry="4.6" fill="#7F1D1D"/>
+      <text class="x x-think" x="98" y="28" font-size="24" font-weight="800" fill="#60A5FA">?</text>
+      <text class="x x-surprise" x="98" y="28" font-size="24" font-weight="800" fill="#F59E0B">!</text>
+      <text class="x x-sleep" x="92" y="30" font-size="18" font-weight="800" fill="#93C5FD">z</text>
+      <text class="x x-sleep" x="102" y="18" font-size="12" font-weight="800" fill="#93C5FD">z</text>
+      <path class="x x-spark" d="M12 22 L14 28 L20 30 L14 32 L12 38 L10 32 L4 30 L10 28Z" fill="#FBBF24"/>
+      <path class="x x-spark" d="M106 34 L107.5 38 L112 39.5 L107.5 41 L106 45 L104.5 41 L100 39.5 L104.5 38Z" fill="#FBBF24"/>
+    </g>
+  </svg>
+</div>
+
+<div id="hud" class="hud" role="group" aria-label="Portfolio game progress">
+  <span class="hud-lv" id="hudLv">LV 1</span>
+  <div class="hud-bar" id="hudBar" role="progressbar" aria-label="Experience points" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0"><span id="hudFill"></span></div>
+  <span class="hud-xp" id="hudXp">0 XP</span>
+  <button class="hud-btn" id="achBtn" aria-expanded="false" aria-controls="achPanel" title="Achievements">🏆 <span id="achCount">0/8</span></button>
+  <button class="hud-btn" id="sndBtn" aria-pressed="true" aria-label="Sound" title="Sound on or off">🔊</button>
+  <div class="ach-panel" id="achPanel" hidden></div>
+</div>
+<div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+<div id="quest" class="quest" role="dialog" aria-labelledby="questTitle" hidden>
+  <h3 id="questTitle">Quest complete!</h3>
+  <p>You explored the whole portfolio. Rohith is open to SRE, Production Engineering and Cloud/DevOps roles. Want to talk?</p>
+  <div class="quest-actions">
+    <a href="#contact" class="btn btn-primary" id="questContact">Contact me</a>
+    <button class="btn btn-outline" id="questClose" type="button">Keep exploring</button>
+  </div>
+</div>
+
+<script>
+// ── Play mode: mascot "Bit", XP, achievements, sounds (off by default) ──
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const body = document.body;
+  const reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const store = { get(k){ try { return localStorage.getItem(k); } catch (e) { return null; } },
+                  set(k,v){ try { localStorage.setItem(k,v); } catch (e) {} } };
+  const rand = (a,b) => a + Math.random() * (b - a);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+
+  const playBtn = $('playToggle'), bit = $('bit'), bitSvg = $('bitSvg'), say = $('bitSay'),
+        hudLv = $('hudLv'), hudFill = $('hudFill'), hudBar = $('hudBar'), hudXp = $('hudXp'),
+        achBtn = $('achBtn'), achCount = $('achCount'), achPanel = $('achPanel'), sndBtn = $('sndBtn'),
+        toasts = $('toasts'), quest = $('quest'), themeBtn = $('themeToggle');
+  const pupils = bit.querySelectorAll('.pupil');
+  let playOn = false, soundOn = true;
+
+  // ── Sound (generated in the browser, no files) ──
+  let actx = null;
+  function audio() {
+    if (!actx) { try { const AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } catch (e) {} }
+    if (actx && actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
+    return actx;
+  }
+  function tone(f, t0, d, type, v) {
+    const c = audio(); if (!c) return;
+    try {
+      const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+      o.type = type || 'sine'; o.frequency.setValueAtTime(f, t);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(v || 0.05, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + d + 0.05);
+    } catch (e) {}
+  }
+  const SFX = {
+    toLight: () => { tone(523, 0, .12); tone(784, .1, .2); },
+    toDark:  () => { tone(784, 0, .12); tone(523, .1, .22); },
+    blip:    () => tone(660, 0, .08, 'square', .03),
+    ach:     () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * .09, .16, 'triangle', .06)),
+    level:   () => [440, 554, 659, 880].forEach((f, i) => tone(f, i * .07, .12, 'square', .03))
+  };
+  const sfx = n => { if (playOn && soundOn && SFX[n]) SFX[n](); };
+
+  // ── Mascot ──
+  let x = 24, target = 24, mood = 'idle', moodUntil = 0, mx = innerWidth / 2, my = innerHeight / 2;
+  let lastInput = performance.now(), lastT = 0, nextWander = 0, raf = null, sayTimer = null, sayAt = 0;
+  const maxX = () => Math.max(20, innerWidth - (bit.offsetWidth || 88) - 84);
+  const place = () => { bit.style.transform = 'translate3d(' + x + 'px,0,0)'; };
+
+  function setMood(m, ms) {
+    mood = m; bit.dataset.mood = m;
+    moodUntil = ms ? performance.now() + ms : 0;
+  }
+  function speak(text, ms, low) {
+    if (low && say.classList.contains('show') && performance.now() - sayAt < 1800) return;
+    say.textContent = text;
+    say.classList.remove('edge-l', 'edge-r');
+    if (x < 90) say.classList.add('edge-l'); else if (x > innerWidth - 220) say.classList.add('edge-r');
+    say.classList.add('show'); sayAt = performance.now();
+    clearTimeout(sayTimer); sayTimer = setTimeout(() => say.classList.remove('show'), ms || 2800);
+  }
+  function walking(on) { bit.classList.toggle('walking', on); }
+  function look(px, py) { pupils.forEach(p => { p.style.transform = 'translate(' + px.toFixed(2) + 'px,' + py.toFixed(2) + 'px)'; }); }
+
+  function frame(t) {
+    raf = requestAnimationFrame(frame);
+    const dt = Math.min(0.05, (t - lastT) / 1000 || 0.016); lastT = t;
+    if (moodUntil && t > moodUntil && mood !== 'sleep') setMood('idle');
+    if (t - lastInput > 16000 && mood !== 'sleep') { setMood('sleep'); target = x; speak('zzz…', 2200); }
+    if (mood === 'sleep') { walking(false); look(0, 0); }
+    else {
+      if (t > nextWander && mood === 'idle' && Math.abs(target - x) < 3) { target = rand(20, maxX()); nextWander = t + rand(3500, 7500); }
+      const d = target - x;
+      if (Math.abs(d) > 2) { x += Math.sign(d) * Math.min(Math.abs(d), 70 * dt); walking(true); } else walking(false);
+      if (mood === 'think') look(-2.4, -3);
+      else {
+        const r = bit.getBoundingClientRect();
+        const dx = mx - (r.left + r.width / 2), dy = my - (r.top + r.height * 0.4);
+        const dist = Math.hypot(dx, dy) || 1, k = Math.min(1, dist / 200);
+        look(dx / dist * 3.2 * k, dy / dist * 3.2 * k);
+      }
+    }
+    place();
+  }
+  function wake() {
+    lastInput = performance.now();
+    if (playOn && mood === 'sleep') { setMood('surprised', 900); speak("Oh! You're back."); }
+  }
+
+  const REACT = [
+    ['.project-card', 'excited', ['Ooh, shipped automation!', 'Scripts that saved hours.', 'Production-grade, nice!']],
+    ['.skill-category', 'think', ['Hmm… Linux, AWS, Bash. Solid stack.', 'Strong toolbox.']],
+    ['.soft-card', 'cheer', ['Soft skills matter too.', 'Calm under pressure!']],
+    ['.timeline-item', 'think', ['Real production experience.', 'Incidents, backups, failover.']],
+    ['.stat-card', 'surprised', ['Numbers!', 'Those add up.']],
+    ['.cert-item', 'cheer', ['Always learning.', 'Nice certs.']],
+    ['.edu-card', 'think', ['Studying while working.', 'BCA alongside a full-time job.']],
+    ['.achievement-card', 'cheer', ['National podium, and Team Lead!', '3rd place, pan-India.']],
+    ['.contact-link', 'wave', ['Say hi! He replies.', 'Go on, send a mail.']]
+  ];
+  const REACT_SEL = REACT.map(r => r[0]).join(',');
+  let lastEl = null, lastReactT = 0;
+  document.addEventListener('pointerover', e => {
+    if (!playOn || !e.target.closest) return;
+    const el = e.target.closest(REACT_SEL); if (!el) return;
+    const now = performance.now();
+    if (el === lastEl && now - lastReactT < 3000) return;
+    lastEl = el; lastReactT = now; lastInput = now;
+    const rule = REACT.find(r => el.matches(r[0]));
+    if (el.matches('.project-card')) unlock('builder');
+    setMood(rule[1], 2600);
+    if (!reduce) { const r = el.getBoundingClientRect(); target = Math.max(20, Math.min(maxX(), r.left + r.width / 2 - 44)); }
+    speak(pick(rule[2]), 2600);
+  });
+
+  // ── Game state ──
+  const ACH = [
+    { id: 'hello', name: 'Say Hello', desc: 'Click the mascot.' },
+    { id: 'night', name: 'Lights Out', desc: 'Switch the theme.' },
+    { id: 'skills', name: 'Skill Scout', desc: 'Visit the skills section.' },
+    { id: 'builder', name: 'Project Inspector', desc: 'Hover or tap a project.' },
+    { id: 'resume', name: 'Recruiter Mode', desc: 'Download the resume.' },
+    { id: 'secret', name: 'Found the Secret', desc: 'Try a classic cheat code.', secret: true },
+    { id: 'explorer', name: 'Explorer', desc: 'Visit every section.' },
+    { id: 'complete', name: 'Completionist', desc: 'Unlock everything else.' }
+  ];
+  const got = new Set(), seen = new Set(), spoken = new Set();
+  let maxPct = 0, lastLv = 0, questShown = false;
+  const SECS = ['about', 'skills', 'experience', 'projects', 'education', 'achievements', 'contact'];
+  const SEC_LINES = {
+    about: "Hi! I'm Bit, Rohith's sidekick.", skills: 'Bash, Linux, AWS… nice toolbox.',
+    experience: 'Real production experience.', projects: 'Hover over a card. I react!',
+    education: 'Always learning.', achievements: 'National podium, and he was Team Lead.',
+    contact: 'Say hi! He replies.'
+  };
+
+  function renderPanel() {
+    achPanel.textContent = '';
+    ACH.forEach(a => {
+      const row = document.createElement('div'); row.className = 'ach-row' + (got.has(a.id) ? ' got' : '');
+      const ico = document.createElement('span'); ico.textContent = got.has(a.id) ? '🏆' : '🔒';
+      const txt = document.createElement('div'); const b = document.createElement('b');
+      b.textContent = got.has(a.id) || !a.secret ? a.name : '???';
+      txt.appendChild(b); txt.appendChild(document.createTextNode(a.desc));
+      row.appendChild(ico); row.appendChild(txt); achPanel.appendChild(row);
+    });
+    achCount.textContent = got.size + '/' + ACH.length;
+  }
+  function updateHud() {
+    const xp = Math.round(maxPct * 600) + got.size * 50;
+    const lv = Math.min(10, Math.floor(xp / 100) + 1);
+    hudXp.textContent = xp + ' XP'; hudLv.textContent = 'LV ' + lv;
+    hudFill.style.width = Math.min(100, xp / 10) + '%'; hudBar.setAttribute('aria-valuenow', String(xp));
+    if (lastLv && lv > lastLv) { sfx('level'); setMood('cheer', 1800); speak('Level up! LV ' + lv, 2400); }
+    lastLv = lv;
+  }
+  function toast(a) {
+    const t = document.createElement('div'); t.className = 'toast';
+    const s = document.createElement('small'); s.textContent = 'Achievement unlocked';
+    const st = document.createElement('strong'); st.textContent = a.name;
+    const sp = document.createElement('span'); sp.textContent = '+50 XP';
+    t.appendChild(s); t.appendChild(st); t.appendChild(sp); toasts.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+    while (toasts.children.length > 3) toasts.firstChild.remove();
+  }
+  function unlock(id) {
+    if (!playOn || got.has(id)) return;
+    const a = ACH.find(x => x.id === id); if (!a) return;
+    got.add(id); toast(a); sfx('ach'); setMood('cheer', 1800);
+    renderPanel(); updateHud();
+    if (ACH.filter(x => x.id !== 'complete').every(x => got.has(x.id))) unlock('complete');
+    maybeQuest();
+  }
+  function maybeQuest() {
+    if (questShown || !playOn) return;
+    if (got.has('complete') || (got.has('explorer') && maxPct > 0.97)) {
+      questShown = true; quest.hidden = false; setMood('cheer', 3000); speak('Quest complete!', 3000); sfx('ach');
+    }
+  }
+  let ticking = false;
+  function checkScroll() {
+    ticking = false; if (!playOn) return;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const pct = max > 0 ? Math.min(1, scrollY / max) : 0; if (pct > maxPct) maxPct = pct;
+    SECS.forEach(id => {
+      const el = $(id); if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.35) {
+        seen.add(id);
+        if (!spoken.has(id)) { spoken.add(id); speak(SEC_LINES[id], 3000, true); }
+      }
+    });
+    if (seen.has('skills')) unlock('skills');
+    if (SECS.every(id => seen.has(id))) unlock('explorer');
+    updateHud(); maybeQuest();
+  }
+
+  // ── Inputs ──
+  let clicks = 0, clickT = 0;
+  bitSvg.addEventListener('pointerup', () => {
+    if (!playOn) return;
+    const now = performance.now(); clicks = now - clickT < 4000 ? clicks + 1 : 1; clickT = now;
+    wake(); setMood('surprised', 1100); sfx('blip');
+    speak(pick(['Hey!', 'Boop!', 'That tickles.', "I'm Bit!", 'Hire Rohith. He is good.']), 2200);
+    unlock('hello');
+    if (clicks >= 7) { clicks = 0; secret(); }
+  });
+  function secret() { unlock('secret'); setMood('cheer', 4000); speak('Cheat code accepted!', 3200); }
+  const KON = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let ki = 0;
+  addEventListener('keydown', e => {
+    wake(); if (!playOn) return;
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (k === KON[ki]) { ki++; if (ki === KON.length) { ki = 0; secret(); } } else ki = k === KON[0] ? 1 : 0;
+  });
+  addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; wake(); }, { passive: true });
+  addEventListener('touchstart', wake, { passive: true });
+  addEventListener('scroll', () => { wake(); if (playOn && !ticking) { ticking = true; requestAnimationFrame(checkScroll); } }, { passive: true });
+  addEventListener('resize', () => { x = Math.min(x, maxX()); target = Math.min(target, maxX()); place(); });
+
+  themeBtn.addEventListener('click', () => {
+    if (!playOn) return;
+    const t = document.documentElement.getAttribute('data-theme');
+    sfx(t === 'light' ? 'toLight' : 'toDark'); unlock('night');
+    setMood('cheer', 1800); speak(t === 'light' ? 'Lights on!' : 'Dark mode. Cozy.', 2200);
+  });
+  document.querySelectorAll('a[download]').forEach(a => a.addEventListener('click', () => unlock('resume')));
+
+  achBtn.addEventListener('click', () => {
+    const open = achPanel.hidden; achPanel.hidden = !open; achBtn.setAttribute('aria-expanded', String(open));
+  });
+  sndBtn.addEventListener('click', () => {
+    soundOn = !soundOn; sndBtn.setAttribute('aria-pressed', String(soundOn)); sndBtn.textContent = soundOn ? '🔊' : '🔇';
+    if (soundOn) { audio(); SFX.blip(); }
+  });
+  $('questClose').addEventListener('click', () => { quest.hidden = true; });
+  $('questContact').addEventListener('click', () => { quest.hidden = true; });
+
+  // ── Toggle ──
+  function setPlay(on, user) {
+    playOn = on; body.classList.toggle('play', on);
+    playBtn.setAttribute('aria-pressed', String(on)); store.set('play', on ? '1' : '0');
+    playBtn.classList.remove('play-new');
+    if (on) {
+      if (user) audio();
+      x = Math.min(x, maxX()); target = x; lastInput = performance.now(); nextWander = lastInput + 2500;
+      setMood('wave', 2800); speak("Hi! I'm Bit. Hover over things and I'll react.", 4200);
+      renderPanel(); place();
+      if (!reduce && !raf) raf = requestAnimationFrame(frame);
+      checkScroll(); if (user) sfx('blip');
+    } else {
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      say.classList.remove('show'); achPanel.hidden = true; achBtn.setAttribute('aria-expanded', 'false'); quest.hidden = true;
+    }
+  }
+  playBtn.addEventListener('click', () => setPlay(!playOn, true));
+  if (store.get('play') === '1') { playBtn.classList.remove('play-new'); setPlay(true, false); }
+  else if (store.get('play') === '0') playBtn.classList.remove('play-new');
+})();
 </script>
 </body>
 </html>
