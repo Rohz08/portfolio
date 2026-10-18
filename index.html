@@ -2111,11 +2111,12 @@
     SECS.forEach(id => {
       const el = $(id); if (!el) return;
       const r = el.getBoundingClientRect();
-      if (r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.35) {
-        seen.add(id);
-        if (!spoken.has(id)) { spoken.add(id); speak((skin === 'bot' ? BOT_SEC : SEC_LINES)[id], 3000, true); }
+      if (r.top < innerHeight * 0.55) seen.add(id);
+      if (r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.35 && !spoken.has(id)) {
+        spoken.add(id); speak((skin === 'bot' ? BOT_SEC : SEC_LINES)[id], 3000, true);
       }
     });
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) SECS.forEach(id => seen.add(id));
     if (seen.has('skills')) unlock('skills');
     if (SECS.every(id => seen.has(id))) unlock('explorer');
     updateHud(); maybeQuest();
